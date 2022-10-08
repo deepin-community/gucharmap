@@ -1,0 +1,52 @@
+From: Steve Langasek <vorlon@debian.org>
+Date: Sun, 17 Jun 2012 14:28:42 +0000
+Subject: compatibility with the unicode-data package
+
+Adjust the script used for unicode header file generation
+for compatibility with the Debian unicode-data package.
+
+Bug-Debian: https://bugs.debian.org/603405
+---
+ gucharmap/gen-guch-unicode-tables.pl | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/gucharmap/gen-guch-unicode-tables.pl b/gucharmap/gen-guch-unicode-tables.pl
+index 55f4beb..fc1e64f 100755
+--- a/gucharmap/gen-guch-unicode-tables.pl
++++ b/gucharmap/gen-guch-unicode-tables.pl
+@@ -12,7 +12,7 @@
+ #  - unicode-versions.h
+ #
+ # usage: ./gen-guch-unicode-tables.pl UNICODE-VERSION UNICODE-DIRECTORY OUTPUT-DIRECTORY
+-# where DIRECTORY contains UnicodeData.txt Unihan.zip NamesList.txt Blocks.txt Scripts.txt
++# where DIRECTORY contains UnicodeData.txt Unihan_Readings.txt.bz2 NamesList.txt Blocks.txt Scripts.txt
+ #
+ # NOTE! Some code copied from glib/glib/gen-unicode-tables.pl; keep in sync!
+ 
+@@ -32,7 +32,7 @@ if (@ARGV != 3 && @ARGV != 4)
+ Usage: $0 UNICODE-VERSION UNICODE-DIRECTORY OUTPUT-DIRECTORY [--i18n]
+ 
+ DIRECTORY should contain the following Unicode data files:
+-UnicodeData.txt Unihan.zip NamesList.txt Blocks.txt Scripts.txt
++UnicodeData.txt Unihan_Readings.txt.bz2 NamesList.txt Blocks.txt Scripts.txt
+ 
+ which can be found at https://www.unicode.org/Public/UNIDATA/
+ 
+@@ -55,7 +55,7 @@ opendir (my $dir, $d) or die "Cannot open Unicode data dir $d: $!\n";
+ for my $f (readdir ($dir))
+ {
+     $unicodedata_txt = "$d/$f" if ($f =~ /UnicodeData.*\.txt/);
+-    $unihan_zip = "$d/$f" if ($f =~ /Unihan.*\.zip/);
++    $unihan_zip = "$d/$f" if ($f =~ /Unihan_Readings\.txt\.bz2/);
+     $nameslist_txt = "$d/$f" if ($f =~ /NamesList.*\.txt/);
+     $blocks_txt = "$d/$f" if ($f =~ /Blocks.*\.txt/);
+     $scripts_txt = "$d/$f" if ($f =~ /Scripts.*\.txt/);
+@@ -63,7 +63,7 @@ for my $f (readdir ($dir))
+ }
+ 
+ defined $unicodedata_txt or die "Did not find $d/UnicodeData.txt";
+-defined $unihan_zip or die "Did not find $d/Unihan.zip";
++defined $unihan_zip or die "Did not find $d/Unihan_Readings.txt.bz2";
+ defined $nameslist_txt or die "Did not find $d/NamesList.txt";
+ defined $blocks_txt or die "Did not find $d/Blocks.txt";
+ defined $scripts_txt or die "Did not find $d/Scripts.txt";

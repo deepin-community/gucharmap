@@ -1,0 +1,33 @@
+#!/bin/sh
+# Copyright 2020 Collabora Ltd.
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set -eux
+
+if [ -n "${DEB_HOST_GNU_TYPE:-}" ]; then
+    CROSS_COMPILE="$DEB_HOST_GNU_TYPE-"
+else
+    CROSS_COMPILE=
+fi
+
+cd "$AUTOPKGTEST_TMP"
+
+cat > trivial.c <<EOF
+#include <gucharmap/gucharmap.h>
+
+int main(void)
+{
+    GucharmapCodepointList *c = gucharmap_script_codepoint_list_new();
+
+    gucharmap_script_codepoint_list_set_script(GUCHARMAP_SCRIPT_CODEPOINT_LIST(c), "Latin");
+    g_assert_cmpuint(gucharmap_codepoint_list_get_char(c, gucharmap_codepoint_list_get_index(c, 'A')), ==, 'A');
+
+    g_object_unref(c);
+    return 0;
+}
+EOF
+
+# Deliberately word-splitting pkg-config's output:
+# shellcheck disable=SC2046
+"${CROSS_COMPILE}gcc" -otrivial trivial.c $("${CROSS_COMPILE}pkg-config" --cflags --libs gucharmap-2.90)
+./trivial

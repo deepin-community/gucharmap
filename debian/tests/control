@@ -1,0 +1,11 @@
+Tests: libgucharmap-2-90-dev
+Depends: build-essential,
+         libgucharmap-2-90-dev,
+         pkg-config
+Restrictions: allow-stderr, superficial
+
+Tests: gir1.2-gucharmap-2.90
+Depends: gir1.2-gucharmap-2.90,
+         python3,
+         python3-gi
+Restrictions: allow-stderr, superficial

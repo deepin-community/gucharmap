@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+# Copyright 2020 Collabora Ltd.
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+import gi
+gi.require_version('Gucharmap', '2.90')
+
+from gi.repository import Gucharmap
+
+if __name__ == '__main__':
+    s = Gucharmap.ScriptCodepointList.new()
+    s.set_script("Latin")
+    assert s.get_char(s.get_index('A')) == 'A'

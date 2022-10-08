@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,-O1 -Wl,-z,defs
+
+export PROG_UNZIP = bunzip2
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-Ddocs=true \
+		-Dgir=true \
+		-Dvapi=true \
+		-Ducd_path=/usr/share/unicode/
+
+override_dh_gnome:
+	dh_gnome --no-gnome-versions
+
+override_dh_gencontrol:
+	dh_gencontrol -- -VBuilt-Using="$(shell dpkg-query -f '$${source:Package} (= $${source:Version}), ' -W unicode-data)"
