@@ -28,9 +28,7 @@
   If not, see <https://www.gnu.org/licenses/>.
 -->
 <component type="desktop-application"
-  xmlns="https://specifications.freedesktop.org/metainfo/1.0"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
-  xmlns:its="http://www.w3.org/2005/11/its">
+  xmlns="https://specifications.freedesktop.org/metainfo/1.0">
   <id>gucharmap.desktop</id>
   <metadata_license>GPL-3.0+ or GFDL-1.3-only</metadata_license>
   <project_license>GPL-3.0+</project_license>
@@ -49,11 +47,14 @@
       by unicode name or code point of the character.
     </p>
   </description>
-<!--
   <screenshots>
-    <screenshot type="default">...</screenshot>
+    <screenshot type="default">
+      <image type="source">https://gitlab.gnome.org/GNOME/gucharmap/-/raw/master/data/gucharmap-1.png</image>
+    </screenshot>
+    <screenshot>
+      <image type="source">https://gitlab.gnome.org/GNOME/gucharmap/-/raw/master/data/gucharmap-2.png</image>
+    </screenshot>
   </screenshots>
--->
   <kudos>
     <kudo>ModernToolkit</kudo>
     <kudo>UserDocs</kudo>
@@ -61,4 +62,5 @@
   <url type="homepage">https://wiki.gnome.org/Apps/Gucharmap</url>
   <project_group>GNOME</project_group>
   <translation type="gettext">gucharmap</translation>
+  <launchable type="desktop-id">gucharmap.desktop</launchable>
 </component>

@@ -15,8 +15,5 @@ override_dh_auto_configure:
 		-Dvapi=true \
 		-Ducd_path=/usr/share/unicode/
 
-override_dh_gnome:
-	dh_gnome --no-gnome-versions
-
 override_dh_gencontrol:
 	dh_gencontrol -- -VBuilt-Using="$(shell dpkg-query -f '$${source:Package} (= $${source:Version}), ' -W unicode-data)"
