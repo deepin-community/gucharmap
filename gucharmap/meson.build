@@ -140,6 +140,7 @@ libgucharmap_gtk3_public_deps = [
   gio_dep,
   glib_dep,
   gtk3_dep,
+  pcre2_dep,
 ]
 
 libgucharmap_gtk3_deps = libgucharmap_gtk3_public_deps
@@ -289,7 +290,6 @@ install_data(
   install_dir: schemadir,
 )
 
-meson.add_install_script(
-  'meson_compileschemas.py',
-  schemadir,
+gnome.post_install(
+  glib_compile_schemas: true,
 )

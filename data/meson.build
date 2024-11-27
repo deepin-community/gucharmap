@@ -15,15 +15,20 @@
 
 # Appstream data
 
+metainfo_its = [
+  'metainfo.its',
+]
+
 metainfodir = gucharmap_prefix / gucharmap_datadir / 'metainfo'
 
-i18n.merge_file(
-  'gucharmap.metainfo.xml',
+i18n.itstool_join(
   input: 'gucharmap.metainfo.xml.in',
-  output: '@BASENAME@',
-  po_dir: po_dir,
   install: true,
   install_dir: metainfodir,
+  install_tag: 'metadata',
+  its_files: metainfo_its,
+  mo_targets: gettext_targets[0],
+  output: '@BASENAME@',
 )
 
 # Desktop file
@@ -42,7 +47,6 @@ desktop_in = configure_file(
 )
 
 i18n.merge_file(
-  'gucharmap.desktop',
   input: desktop_in,
   output: '@BASENAME@',
   type: 'desktop',

@@ -19,12 +19,12 @@ project(
   default_options: [
     'buildtype=release',
     'c_std=gnu11',
-    'warning_level=' + (meson.version().version_compare('>= 0.50.0') ? '0' : '1'),
+    'warning_level=0',
     'b_ndebug=false',
   ],
   license: ['GPL-3.0-or-later',],
-  meson_version: '>= 0.49.0',
-  version: '14.0.0',
+  meson_version: '>= 0.62.0',
+  version: '15.1.5',
 )
 
 # Naming
@@ -37,6 +37,7 @@ freetype2_req_version = '1.0'
 gio_req_version       = '2.32.0'
 glib_req_version      = '2.32.0'
 gtk3_req_version      = '3.4.0'
+pcre2_req_version     = '10.21'
 
 # NOTE! This is an exact requirement. Each gucharmap version (major.minor) is
 # designed to work with, and only with, this unicode version. Upgrading to
@@ -45,7 +46,7 @@ gtk3_req_version      = '3.4.0'
 # changes to gucharmap. Therefore, you should NOT upgrade the unicode version
 # of a released gucharmap, but upgrade to the gucharmap version corresponding
 # to the desired unicode version.
-unicode_req_version   = '14.0.0'
+unicode_req_version   = '15.1.0'
 
 # API
 
@@ -78,7 +79,6 @@ libgucharmap_gtk4_soversion = '0'
 # i18n
 
 gucharmap_gettext_domain = gucharmap_name
-po_dir = meson.current_source_dir() / 'po'
 
 # Directories
 
@@ -136,6 +136,14 @@ check_dl_functions_required = [
 foreach func: check_dl_functions_required
   assert(cc.has_function(func, dependencies: libdl_dep), func + ' not found')
 endforeach
+
+# Asserts must not be disabled
+
+assert(get_option('b_ndebug') == 'false', 'assertions may not be disabled')
+
+# LTO very much NOT supported
+
+assert(get_option('b_lto') == false, 'LTO not supported')
 
 # Compiler flags
 
@@ -231,9 +239,10 @@ endforeach
 
 # Dependencies
 
-freetype2_dep = dependency('freetype2', version: '>=' + freetype2_req_version,)
-gio_dep       = dependency('gio-2.0',   version: '>=' + gio_req_version,)
-glib_dep      = dependency('glib-2.0',  version: '>=' + glib_req_version,)
+freetype2_dep = dependency('freetype2',  version: '>=' + freetype2_req_version,)
+gio_dep       = dependency('gio-2.0',    version: '>=' + gio_req_version,)
+glib_dep      = dependency('glib-2.0',   version: '>=' + glib_req_version,)
+pcre2_dep     = dependency('libpcre2-8', version: '>=' + pcre2_req_version)
 
 if get_option('gtk3')
   gtk3_dep = dependency('gtk+-3.0',  version: '>=' + gtk3_req_version,)
@@ -252,9 +261,9 @@ configure_file(
 
 top_inc = include_directories('.')
 
+subdir('po')
 subdir('data')
 subdir('gucharmap')
-subdir('po')
 
 if get_option('docs')
   subdir('docs' / 'reference')

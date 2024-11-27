@@ -11,7 +11,7 @@ Bug-Debian: https://bugs.debian.org/603405
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/gucharmap/gen-guch-unicode-tables.pl b/gucharmap/gen-guch-unicode-tables.pl
-index 55f4beb..fc1e64f 100755
+index 7af1c63..9d98aed 100755
 --- a/gucharmap/gen-guch-unicode-tables.pl
 +++ b/gucharmap/gen-guch-unicode-tables.pl
 @@ -12,7 +12,7 @@

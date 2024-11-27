@@ -126,6 +126,7 @@ sub process_unicode_data_txt
         next if ($name =~ /^TANGUT IDEOGRAPH-[0-9A-F]{4,6}$/);
         next if ($name =~ /^TANGUT COMPONENT-[0-9]+$/);
         next if ($name =~ /^KHITAN SMALL SCRIPT CHARACTER-[0-9A-F]+$/);
+        next if ($name =~ /^NUSHU CHARACTER-[0-9A-F]+$/);
 
         # Skip unwanted items
         next if ($name =~ /^<.+, (First|Last)>$/);
@@ -558,6 +559,7 @@ sub process_nameslist_txt
 
     my $nameslist_hash;
     my $in_multiline_comment = 0;
+    my $seen_v = 0;
 
     while (my $line = <$nameslist>)
     {
@@ -574,6 +576,11 @@ sub process_nameslist_txt
         {
             $in_multiline_comment = 1;
             next;
+        }
+        elsif ($line =~ /^@@@\tThe Unicode Standard ([0-9]+\.[0-9]+\.[0-9]+)$/)
+        {
+            die "$d contains unicode data for version $1 but version $v is required" unless $1 eq $v;
+            $seen_v = 1;
         }
         elsif ($line =~ /^@/)
         {
@@ -641,6 +648,8 @@ sub process_nameslist_txt
     }
 
     close ($nameslist);
+
+    die "Unicode version marker not found in $nameslist_txt" unless $seen_v;
 
     open (my $out, "> $outdir/unicode-nameslist.h") or die;
 
